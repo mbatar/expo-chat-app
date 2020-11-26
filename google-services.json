@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "252313981555",
+    "firebase_url": "https://expo-chat-rn.firebaseio.com",
+    "project_id": "expo-chat-rn",
+    "storage_bucket": "expo-chat-rn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252313981555:android:1a53452f528271f48d9006",
+        "android_client_info": {
+          "package_name": "com.expo.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252313981555-mh061erp3li8ssgo087k58eqiol9bhh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAYZyYhwCPmu0agQhF7XM0OT-vFGRXAZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252313981555-mh061erp3li8ssgo087k58eqiol9bhh5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "252313981555-b4u4j4mcvoore8vv40pgj0gcs8gn0te7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.expo.chatapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
