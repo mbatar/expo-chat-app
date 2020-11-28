@@ -15,7 +15,7 @@ export default function ChatScreen() {
       <FlatList
         data={chats}
         renderItem={Chat}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
       <TouchableOpacity style={styles.button} onPress={() => handleSignout()}>
         <Text

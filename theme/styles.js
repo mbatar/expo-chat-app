@@ -27,4 +27,8 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
+  chat:{
+    flexDirection:'row',
+    justifyContent:'space-between'
+  }
 });

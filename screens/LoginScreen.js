@@ -26,14 +26,14 @@ export default function LoginScreen() {
         placeholder="Email"
         onChangeText={setEmail}
         style={styles.textInput}
-        autoCapitalize={false}
+        autoCapitalize="none"
       />
       <TextInput
         placeholder="Şifre"
         onChangeText={setPassword}
         secureTextEntry={true}
         style={styles.textInput}
-        autoCapitalize={false}
+        autoCapitalize="none"
       />
       <TouchableOpacity
         disabled={loading}
