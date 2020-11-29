@@ -1,23 +1,16 @@
 import React, { useState } from "react";
+import firebase from "../config/firebase";
 import { View, TouchableOpacity, TextInput, Text } from "react-native";
 import { styles } from "../theme/styles";
-import {
-  useAppDispatch,
-  useAppState,
-  login,
-  signup,
-} from "../context/appContext";
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loading } = useAppState();
-  const appDispatch = useAppDispatch();
 
   const handleSignup = () => {
-    signup(appDispatch, email, password);
+    firebase.auth().createUserWithEmailAndPassword(email, password);
   };
   const handleSignin = () => {
-    login(appDispatch, email, password);
+    firebase.auth().signInWithEmailAndPassword(email, password);
   };
   return (
     <View style={{ paddingHorizontal: 10, paddingTop: 10, flex: 1 }}>
@@ -35,11 +28,7 @@ export default function LoginScreen() {
         style={styles.textInput}
         autoCapitalize="none"
       />
-      <TouchableOpacity
-        disabled={loading}
-        style={loading?styles.buttonDisabled:styles.button}
-        onPress={() => handleSignin()}
-      >
+      <TouchableOpacity style={styles.button} onPress={() => handleSignin()}>
         <Text
           style={{
             textAlign: "center",
@@ -51,11 +40,7 @@ export default function LoginScreen() {
           Giriş Yap
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        disabled={loading}
-        style={loading?styles.buttonDisabled:styles.button}
-        onPress={() => handleSignup()}
-      >
+      <TouchableOpacity style={styles.button} onPress={() => handleSignup()}>
         <Text
           style={{
             textAlign: "center",

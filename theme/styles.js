@@ -29,6 +29,10 @@ export const styles = StyleSheet.create({
   },
   chat:{
     flexDirection:'row',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    paddingVertical:10,
+    borderBottomColor:'#CCC',
+    borderBottomWidth:1,
+    position:'relative'
   }
 });

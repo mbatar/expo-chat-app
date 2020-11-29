@@ -1,27 +1,23 @@
-import React, { useContext, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import LoginScreen from "../screens/LoginScreen";
+import ChatListScreen from "../screens/ChatListScreen";
 import ChatScreen from "../screens/ChatScreen";
-import { useAppState } from "../context/appContext";
-import { SafeAreaView } from "react-native";
-import { styles } from "../theme/styles";
 
-const AppStack = createStackNavigator();
 
-export function AppStackScreen() {
-  const { isLogin } = useAppState();
+export const AppStack = createStackNavigator();
+const ChatStack = createStackNavigator();
+
+export const ChatStackScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <AppStack.Navigator>
-          {isLogin ? (
-            <AppStack.Screen name="Chat" component={ChatScreen} />
-          ) : (
-            <AppStack.Screen name="Login" component={LoginScreen} />
-          )}
-        </AppStack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <ChatStack.Navigator>
+      <ChatStack.Screen
+        name="Chats"
+        component={ChatListScreen}
+      />
+      <ChatStack.Screen
+        name="ChatDetails"
+        component={ChatScreen}
+      />
+    </ChatStack.Navigator>
   );
-}
+};

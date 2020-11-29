@@ -1,34 +1,34 @@
 import React from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import { styles } from "../theme/styles";
-import { useAppDispatch, useAppState, logout } from "../context/appContext";
-import Chat from "../components/Chat";
-export default function ChatScreen() {
-  const appDispatch = useAppDispatch();
-  const { chats } = useAppState();
+import { View, Text } from "react-native";
 
-  const handleSignout = () => {
-    logout(appDispatch);
-  };
+export default function ChatScreen({ route, navigation }) {
+  const { chatId, messages } = route.params;
   return (
-    <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
-      <FlatList
-        data={chats}
-        renderItem={Chat}
-        keyExtractor={(item) => item.id.toString()}
-      />
-      <TouchableOpacity style={styles.button} onPress={() => handleSignout()}>
-        <Text
+    <View
+      style={{ flex: 1, paddingHorizontal: 10, justifyContent: "flex-end" }}
+    >
+      {messages.map((message) => (
+        <View
           style={{
-            textAlign: "center",
-            color: "#FFF",
-            fontWeight: "bold",
-            fontSize: 16,
+            backgroundColor: message.from === 1 ? "#2c93db" : "#00e01d",
+            padding: 10,
+            borderRadius: "100%",
+            marginBottom: 6,
+            alignSelf: message.from === 1 ? "flex-start" : "flex-end",
+
           }}
+          key={message.id}
         >
-          Çıkış Yap
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={{
+              color: "#FFF",
+              textAlign: message.from === 1 ? "left" : "right",
+            }}
+          >
+            {message.content}
+          </Text>
+        </View>
+      ))}
     </View>
   );
 }
