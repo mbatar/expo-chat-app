@@ -26,7 +26,9 @@ export default function App() {
             {isLogin ? (
               <AppStack.Screen
                 name="Chat"
-                options={{ headerShown: false }}
+                options={{
+                  headerShown: false,
+                }}
                 component={ChatStackScreen}
               />
             ) : (

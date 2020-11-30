@@ -1,34 +1,91 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useState, useLayoutEffect } from "react";
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { Icon } from "react-native-elements";
+import {
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
+import Message from "../components/Message";
 
 export default function ChatScreen({ route, navigation }) {
+  const [isEditable, setIsEditable] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState([]);
+  const [keyboardShown, setKeyboardShow] = useState(false);
   const { chatId, messages } = route.params;
-  return (
-    <View
-      style={{ flex: 1, paddingHorizontal: 10, justifyContent: "flex-end" }}
-    >
-      {messages.map((message) => (
-        <View
-          style={{
-            backgroundColor: message.from === 1 ? "#2c93db" : "#00e01d",
-            padding: 10,
-            borderRadius: "100%",
-            marginBottom: 6,
-            alignSelf: message.from === 1 ? "flex-start" : "flex-end",
+  const toggle = () => setIsEditable((v) => !v);
 
-          }}
-          key={message.id}
-        >
-          <Text
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Icon
+          name="edit"
+          type="font-awesome"
+          color="#2c93db"
+          onPress={toggle}
+          style={{ padding: 10 }}
+        />
+      ),
+    });
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
+  }, []);
+
+  const _keyboardDidShow = () => {
+    setKeyboardShow(true);
+  };
+
+  const _keyboardDidHide = () => {
+    setKeyboardShow(false);
+  };
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={{ flex: 1, }}
+      keyboardVerticalOffset={64}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1, justifyContent: "flex-end" }}>
+          <FlatList
+            data={messages}
+            renderItem={Message}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={{
+              justifyContent: "flex-end",
+              flex: 1,
+              paddingHorizontal: 10,
+            }}
+          />
+          <View
             style={{
-              color: "#FFF",
-              textAlign: message.from === 1 ? "left" : "right",
+              backgroundColor: "#CCC",
+              padding: 10,
             }}
           >
-            {message.content}
-          </Text>
+            <TextInput
+              style={{
+                height: 40,
+                borderRadius: 100,
+                backgroundColor: "#FFF",
+                paddingLeft: 10,
+              }}
+            />
+          </View>
         </View>
-      ))}
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }

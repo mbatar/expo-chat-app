@@ -11,18 +11,6 @@ export default function ChatListScreen({ navigation }) {
   };
   return (
     <View style={{ paddingHorizontal: 10, paddingTop: 10 }}>
-      <TouchableOpacity style={styles.button} onPress={() => handleSignout()}>
-        <Text
-          style={{
-            textAlign: "center",
-            color: "#FFF",
-            fontWeight: "bold",
-            fontSize: 16,
-          }}
-        >
-          Çıkış Yap
-        </Text>
-      </TouchableOpacity>
       <ChatContext.Consumer>
         {(chats) => (
           <FlatList
