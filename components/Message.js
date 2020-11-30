@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function Message({item}) {
+export default function Message({ item: { item }, isEditable, selectThis }) {
+  const [isSelected, setIsSelected] = useState(false);
+  const handleSelect = () => {
+    setIsSelected(selectThis(item.id));
+  };
   return (
-    <TouchableOpacity >
+    <TouchableOpacity onPress={handleSelect}>
       <View
         style={{
           flexDirection: "row",
@@ -29,7 +33,7 @@ export default function Message({item}) {
             {item.content}
           </Text>
         </View>
-        {/* {isEditable && (
+        {isEditable && (
           <View
             style={{
               marginLeft: 2,
@@ -37,12 +41,10 @@ export default function Message({item}) {
               borderRadius: "100%",
               width: 12,
               height: 12,
-              backgroundColor: selectedMessage.includes(item.id)
-                ? "#000"
-                : "#FFF",
+              backgroundColor: isSelected ? "#000" : "#FFF",
             }}
           ></View>
-        )} */}
+        )}
       </View>
     </TouchableOpacity>
   );

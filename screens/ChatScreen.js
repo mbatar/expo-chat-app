@@ -17,11 +17,17 @@ import Message from "../components/Message";
 
 export default function ChatScreen({ route, navigation }) {
   const [isEditable, setIsEditable] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState([]);
-  const [keyboardShown, setKeyboardShow] = useState(false);
+  const [selectedMessages, setSelectedMessages] = useState([]);
   const { chatId, messages } = route.params;
   const toggle = () => setIsEditable((v) => !v);
-
+  const selectThis = (id) => {
+    selectedMessages.includes(id)
+      ? setSelectedMessages([
+          ...selectedMessages.filter((msgId) => msgId !== id),
+        ])
+      : setSelectedMessages([...selectedMessages, id]);
+    return selectedMessages.includes(id);
+  };
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -34,35 +40,28 @@ export default function ChatScreen({ route, navigation }) {
         />
       ),
     });
-    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
-    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
-
-    return () => {
-      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
-      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
-    };
   }, []);
-
-  const _keyboardDidShow = () => {
-    setKeyboardShow(true);
-  };
-
-  const _keyboardDidHide = () => {
-    setKeyboardShow(false);
-  };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={{ flex: 1, }}
+      style={{ flex: 1 }}
       keyboardVerticalOffset={64}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
           <FlatList
             data={messages}
-            renderItem={Message}
+            renderItem={(item) => (
+              <Message
+                item={item}
+                isEditable={isEditable}
+                selectThis={selectThis}
+              />
+            )}
             keyExtractor={(item) => item.id.toString()}
+            extraData={selectedMessages}
+            refreshing={true}
             contentContainerStyle={{
               justifyContent: "flex-end",
               flex: 1,
