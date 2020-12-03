@@ -1,16 +1,24 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useEffect, useState, useContext } from "react";
+import { View, Text, Platform } from "react-native";
+import { TouchableNativeFeedback } from "react-native-gesture-handler";
+import { ChatContext } from "../context/chatContext";
 
-export default function Message({ item: { item }, isEditable, selectThis }) {
-  const [isSelected, setIsSelected] = useState(false);
-  const handleSelect = () => {
-    setIsSelected(selectThis(item.id));
+export default function Message({ item: { item }, chatId }) {
+  const { _setManageMessageShown } = useContext(ChatContext);
+  const selectMessage = () => {
+    _setManageMessageShown(true, { parentId: chatId, messageId: item.id });
   };
   return (
-    <TouchableOpacity onPress={handleSelect}>
+    <TouchableNativeFeedback
+      background={
+        Platform.OS === "android"
+          ? TouchableNativeFeedback.SelectableBackground()
+          : ""
+      }
+      onLongPress={() => selectMessage()}
+    >
       <View
-        style={{
+        style={{ 
           flexDirection: "row",
           alignSelf: item.from === 1 ? "flex-start" : "flex-end",
           marginBottom: 6,
@@ -33,19 +41,7 @@ export default function Message({ item: { item }, isEditable, selectThis }) {
             {item.content}
           </Text>
         </View>
-        {isEditable && (
-          <View
-            style={{
-              marginLeft: 2,
-              borderWidth: 1,
-              borderRadius: "100%",
-              width: 12,
-              height: 12,
-              backgroundColor: isSelected ? "#000" : "#FFF",
-            }}
-          ></View>
-        )}
       </View>
-    </TouchableOpacity>
+    </TouchableNativeFeedback>
   );
 }

@@ -1,12 +1,23 @@
 import React, { createContext, useState } from "react";
+import * as Random from 'expo-random';
 
 export const ChatContext = createContext();
 
 export default function ChatContextProvider({ children }) {
+  const [manageMessageShown, setManageMessageShown] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const customResponses = [
+    "Bu gün ne oldu biliyor musun ?",
+    "Çok mutluyummmmmmmm.....",
+    "Yarın bi işimiz var bilgin olsun.",
+    "Nerede kaldın ya ?",
+    "Tamam habeleşiriz",
+    "Cevap verecek misin ?",
+  ];
   const [chats, setChats] = useState([
     {
       id: 1,
-      key:'asq',
+      key: "asq",
       with: 2,
       messages: [
         { id: 1, content: "Merhaba, nasılsın ?", from: 2 },
@@ -16,7 +27,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 2,
-      key:'asw',
+      key: "asw",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -26,7 +37,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 3,
-      key:'ase',
+      key: "ase",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -36,7 +47,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 4,
-      key:'asd',
+      key: "asd",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -46,7 +57,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 5,
-      key:'asr',
+      key: "asr",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -56,7 +67,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 6,
-      key:'ast',
+      key: "ast",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -66,7 +77,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 7,
-      key:'asy',
+      key: "asy",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -76,7 +87,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 8,
-      key:'asu',
+      key: "asu",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -86,7 +97,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 9,
-      key:'aso',
+      key: "aso",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -96,7 +107,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 10,
-      key:'asp',
+      key: "asp",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -106,7 +117,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 11,
-      key:'asa',
+      key: "asa",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -116,7 +127,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 12,
-      key:'asg',
+      key: "asg",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -126,7 +137,7 @@ export default function ChatContextProvider({ children }) {
     },
     {
       id: 13,
-      key:'asf',
+      key: "asf",
       with: 3,
       messages: [
         { id: 1, content: "İşe gidiyorum.", from: 3 },
@@ -135,5 +146,85 @@ export default function ChatContextProvider({ children }) {
       ],
     },
   ]);
-  return (<ChatContext.Provider value={chats}>{children}</ChatContext.Provider>);
+
+  const getMessagesByChatId = (chatId) => {
+    return chats.filter((chat) => chat.id == chatId)[0].messages.reverse();
+  };
+  const _setManageMessageShown = (isShown, message) => {
+    setManageMessageShown(isShown);
+    setSelectedMessage(message);
+  };
+  const createMessage = (chatId, message) => {
+    setChats((chats) => {
+      return chats.map((chat) => {
+        if (chat.id === chatId) {
+          return {
+            ...chat,
+            messages: [
+              ...chat.messages,
+              { id: Random.getRandomBytes(1024), content: message, from: 1 },
+            ],
+          };
+        } else {
+          return chat;
+        }
+      });
+    });
+    setTimeout(() => {
+      setChats((chats) => {
+        return chats.map((chat) => {
+          if (chat.id === chatId) {
+            return {
+              ...chat,
+              messages: [
+                ...chat.messages,
+                {
+                  id: chat.messages.length + 1,
+                  content:
+                    customResponses[
+                      Math.floor(Math.random() * (customResponses.length - 1))
+                    ],
+                  from: 2,
+                },
+              ],
+            };
+          } else {
+            return chat;
+          }
+        });
+      });
+    }, 1000);
+  };
+  const deleteMessage = () => {
+    setChats(
+      chats.map((chat) => {
+        if (chat.id === selectedMessage.parentId) {
+          return {
+            ...chat,
+            messages: chat.messages.filter(
+              (message) => message.id !== selectedMessage.messageId
+            ),
+          };
+        } else {
+          return chat;
+        }
+      })
+    );
+    setManageMessageShown(false);
+    setSelectedMessage(null);
+  };
+  return (
+    <ChatContext.Provider
+      value={{
+        chats,
+        manageMessageShown,
+        _setManageMessageShown,
+        deleteMessage,
+        createMessage,
+        getMessagesByChatId,
+      }}
+    >
+      {children}
+    </ChatContext.Provider>
+  );
 }

@@ -30,7 +30,7 @@ export default function Chat({ item: { item }, navigation }) {
               Mustafa Batar ({item.with})
             </Text>
             <Text>
-              {dottedWord(item.messages[item.messages.length - 1].content)}
+              {dottedWord(item.messages.length && item.messages[item.messages.length - 1].content)}
             </Text>
           </View>
         </View>
